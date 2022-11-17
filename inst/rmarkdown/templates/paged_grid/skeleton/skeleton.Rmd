@@ -1,7 +1,7 @@
 ---
 title: "Title of the report"
 subtitle: "Subtitle of the report"
-author: "Author Name"
+author: "Author"
 date: "Date"
 output: 
     pagedreport::paged_grid:
