@@ -1,30 +1,84 @@
 ---
-title: "Title of the report"
-subtitle: "Subtitle of the report"
-author: "Author"
-date: "Date"
+title: "Relatório Técnico"
+subtitle: "Previsões Econômicas"
+author: "Natanael Soares Leite"
+date: "`r format(Sys.time(), '%B %Y')`"
 output: 
     pagedreport::paged_grid:
-      logo: "https://mk0rfortheresto0o08q.kinstacdn.com/wp-content/uploads/2020/08/rru-logo-blue.svg"
+      #logo: "C:/Users/natan/Documents/GitHub/pagedreport/inst/resources/img/Logo.png"
 knit: pagedown::chrome_print
-main-color: "#6cabdd"
+main-color: "#38761d"
 ---
+
+```{r, echo=FALSE}
+htmltools::img(src = "C:/Users/natan/Documents/GitHub/pagedreport/inst/resources/img/Logo.png", 
+               alt = 'Logo',
+               style = 'position:absolute;
+               width: 50%;
+               top:-1%;
+               right:41%;
+               padding:10px'
+               ) 
+
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+load("C:/Users/natan/Desktop/Dados_fiscais/Secretaria/Workspace_09-11-2022_v1.RData")
 ```
 
-# This is part 1 {-}
+# Parâmetro e Premissas {-}
 
-## Second level {-}
+As projeções das receitas foram efetuadas com base nos valores passados das séries em análise e, portanto, admitindo-se a premissa básica de que o comportamento passado serve para determinar o comportamento futuro, ou seja, supõe-se que as trajetórias detectadas provavelmente vão continuar a acontecer nos períodos seguintes.
 
-This file is what a user will see when they select your template. Make sure that you update the fields in the yaml header. In particular you will want to update the `output` field to whatever format your template requires.
+Vale salientar, também, que comportamentos irregulares detectados nos históricos das séries podem afetar negativamente a qualidade das projeções. Fatores e choques exógenos são, via de regra, difíceis de modelar, mas devem ser levados em consideração quando possível.
 
-This is a good place to demonstrate special features that your template provides. Ideally it should knit out-of-the-box, or at least contain clear instructions as to what needs changing.
-Finally, be sure to remove this message!
-This file is what a user will see when they select your template. Make sure that you update the fields in the yaml header. In particular you will want to update the `output` field to whatever format your template requires.
+Deve-se, ainda, dar ênfase ao fato de que as previsões são efetuadas para um período muito longo, o que amplifica erros de previsão. Portanto, os resultados devem ser considerados com essa importante ressalva.
 
-This is a good place to demonstrate special features that your template provides. Ideally it should knit out-of-the-box, or at least contain clear instructions as to what needs changing.
+# Modelo {-}
+
+## ICMS {-}
+
+O ICMS é a principal fonte de receita do Estado de Goiás, sendo o maior e mais importante imposto de competência estadual. Por ser cobrado na circulação de mercadorias, sobre o valor a elas agregado, depende significativamente da atividade econômica estadual e brasileira.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(RColorBrewer)
+library(viridis)
+library(gt)
+library(tidyquant)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+
+## Previsoes anuais dos tributos 
+prediction_final %>%
+  filter(.model == "FORECAST RECONCILIATION (MinT)" & Mes < "2030-12-01") %>%
+  mutate(.model = "Projeção") %>%
+  bind_rows(
+    receitas %>%
+    rename(.pred = Valor) %>%
+    mutate(.model = "Atual")
+  ) %>%
+  mutate(Ano = year(Mes)) %>%
+  group_by(Tipo, .model, Ano) %>%
+  summarise(.pred = sum(.pred), .groups = "drop") %>%
+  filter(Tipo %in% c("ICMS", "IPVA", "ITCD", "TOTAL")) %>%
+  group_by(Tipo) %>%
+  mutate(Variacao = (.pred/lag(.pred) - 1)*100) %>%
+  ggplot(aes(x = factor(Ano), y = .pred, fill = .model)) +
+  geom_col(position = position_stack(reverse = TRUE)) +
+  facet_wrap(~Tipo, scales = "free", ncol = 2) +
+  theme_bw() +
+  scale_fill_viridis(discrete = T) +
+  labs(x = "", y = "Arrecadação (R$ milhões)", fill = "") +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.text.x = element_text(angle = 35, vjust = 0.9, hjust = 1),
+    legend.text = element_text(size = 12)
+  )
+```
+
 
 ## Second level {-}
 
