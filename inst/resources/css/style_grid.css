@@ -228,7 +228,7 @@ h1.title {
     background-image: var(--front-cover);
     background-repeat: no-repeat;
     background-position: 25% 15%;
-    background-size: 2cm;
+    background-size: 20cm;
 
     @top-left-corner {
       content: "";
@@ -294,7 +294,7 @@ h1.title {
         background-image: var(--back-cover) ;
         background-repeat: no-repeat;
         background-position: 80% 20%;
-        background-size: 2cm;
+        background-size: 6cm;
         border: none;
     }
 
