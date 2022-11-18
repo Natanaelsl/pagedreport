@@ -30,6 +30,13 @@ load("C:/Users/natan/Desktop/Dados_fiscais/Secretaria/Workspace_09-11-2022_v1.RD
 
 # Parâmetro e Premissas {-}
 
+```{=latex}
+\begin{tabular}{ll}
+A & B \\
+A & B \\
+\end{tabular}
+```
+
 As projeções das receitas foram efetuadas com base nos valores passados das séries em análise e, portanto, admitindo-se a premissa básica de que o comportamento passado serve para determinar o comportamento futuro, ou seja, supõe-se que as trajetórias detectadas provavelmente vão continuar a acontecer nos períodos seguintes.
 
 Vale salientar, também, que comportamentos irregulares detectados nos históricos das séries podem afetar negativamente a qualidade das projeções. Fatores e choques exógenos são, via de regra, difíceis de modelar, mas devem ser levados em consideração quando possível.
